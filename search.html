@@ -118,6 +118,11 @@
     var resultsEl = document.getElementById('search-results');
     var form = document.getElementById('search-form');
     var input = document.getElementById('search-query');
+    var basePath = (function () {
+        if (window.location.protocol === 'file:') return '';
+        var p = window.location.pathname || '';
+        return p.indexOf('/') === -1 ? '' : p.replace(/\/[^/]*$/, '/');
+    })();
 
     function getQuery() {
         var params = new URLSearchParams(window.location.search);
@@ -142,30 +147,33 @@
         return (t || '').trim().replace(/\s+/g, '-').replace(/[?!.,:؛'"׳]/g, '').slice(0, 80);
     }
 
-        function getBlocks(doc) {
+    function getContentRoot(doc) {
+        return doc.querySelector('main') || doc.querySelector('article.article-content') || doc.querySelector('.article') || doc.body;
+    }
+
+    function getBlocks(doc) {
         var blocks = [];
-        var body = doc.body;
-        if (!body) return blocks;
-        var headings = body.querySelectorAll('h2, h3');
+        var root = getContentRoot(doc);
+        if (!root) return blocks;
+        var headings = root.querySelectorAll('h1, h2, h3');
         var used = {};
         headings.forEach(function (h) {
             var id = (h.id || slug(h.textContent)).replace(/^\s*|\s*$/g, '');
-            if (!id) return;
             if (used[id]) { id = id + '-' + (Math.random().toString(36).slice(2, 6)); }
             used[id] = true;
             var text = (h.textContent || '') + ' ';
             var n = h.nextElementSibling;
             while (n) {
-                if (n.tagName === 'H2' || n.tagName === 'H3') break;
+                if (n.tagName === 'H1' || n.tagName === 'H2' || n.tagName === 'H3') break;
                 text += (n.innerText || n.textContent || '') + ' ';
                 n = n.nextElementSibling;
             }
-            blocks.push({ id: id, text: text.replace(/\s+/g, ' ').trim() });
+            var blockText = text.replace(/\s+/g, ' ').trim();
+            if (blockText) blocks.push({ id: id || 'top', text: blockText });
         });
-        if (blocks.length === 0) {
-            var full = (body.innerText || body.textContent || '').replace(/\s+/g, ' ');
-            blocks.push({ id: '', text: full });
-        }
+        var full = (root.innerText || root.textContent || '').replace(/\s+/g, ' ').trim();
+        if (blocks.length === 0 && full) blocks.push({ id: '', text: full });
+        else if (full) blocks.push({ id: '_full', text: full });
         return blocks;
     }
 
@@ -196,7 +204,8 @@
         var maxPerPage = 5;
 
         var promises = PAGES.map(function (p) {
-            return fetch(p.url).then(function (r) { return r.text(); }).then(function (html) {
+            var pageUrl = basePath + p.url;
+            return fetch(pageUrl).then(function (r) { return r.text(); }).then(function (html) {
                 var parser = new DOMParser();
                 var doc = parser.parseFromString(html, 'text/html');
                 [].forEach.call(doc.querySelectorAll('script, style, noscript'), function (el) { el.remove(); });
@@ -209,7 +218,7 @@
                         var term = searchTerms[t];
                         var idx = blockLower.indexOf(term.toLowerCase());
                         if (idx === -1) continue;
-                        var anchor = block.id ? ('#' + block.id) : '';
+                        var anchor = (block.id && block.id !== '_full') ? ('#' + block.id) : '';
                         found.push({
                             title: p.title,
                             url: p.url + anchor,
