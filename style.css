@@ -504,18 +504,20 @@ a:hover {
     .nav-links {
         order: 4;
         display: none;
-        position: absolute;
-        top: 100%;
+        position: fixed;
+        top: 4.5rem;
         right: 0;
         left: 0;
+        width: 100%;
+        max-height: calc(100vh - 4.5rem);
         flex-direction: column;
         background: var(--background);
         padding: 0.35rem 0;
         gap: 0;
         box-shadow: var(--shadow);
-        max-height: 65vh;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        z-index: 999;
     }
 
     .nav-links.active {
