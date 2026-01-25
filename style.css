@@ -487,14 +487,26 @@ a:hover {
         height: 20px;
     }
 
-    /* מובייל: תפריט רגיל תמיד גלוי (בלי המבורגר) – עובד בכל מכשיר */
+    /* מובייל: המבורגר פותח תפריט רגיל בזרימה; אחרי בחירה – חוזר למצב המבורגר */
     .mobile-menu-btn {
-        display: none !important;
+        display: flex;
+        flex-shrink: 0;
+        order: 2;
+        padding: 0.5rem;
+        min-width: 44px;
+        min-height: 44px;
+        position: relative;
+        z-index: 1001;
+    }
+
+    .mobile-menu-btn span {
+        width: 18px;
+        height: 2px;
     }
 
     .nav-links {
         order: 4;
-        display: flex;
+        display: none;
         flex-direction: column;
         width: 100%;
         flex: 1 1 100%;
@@ -505,6 +517,8 @@ a:hover {
         box-shadow: 0 4px 8px rgba(0,0,0,0.08);
         border-radius: var(--radius-sm);
         margin-top: 0.25rem;
+        max-height: 70vh;
+        overflow-y: auto;
     }
 
     .nav-links.active {
