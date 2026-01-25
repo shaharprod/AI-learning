@@ -580,37 +580,144 @@
     transform: scale(1.05);
 }
 
-/* Responsive */
+/* Responsive - Mobile */
 @media (max-width: 768px) {
     .article {
-        padding-top: 80px;
+        padding-top: 72px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .article .container {
+        padding: 0 1rem;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .article-content {
+        max-width: 100%;
+        overflow-wrap: break-word;
+        word-break: break-word;
+    }
+
+    .article-content h1,
+    .article-content h2,
+    .article-content h3 {
+        overflow-wrap: break-word;
+        word-break: break-word;
+    }
+
+    .article-header-image {
+        max-width: 100%;
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
     }
 
     .article-nav {
         flex-direction: column;
+        gap: 0.75rem;
+        padding-top: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .article-nav .btn {
+        width: 100%;
+        max-width: 100%;
+        text-align: center;
+        box-sizing: border-box;
     }
 
     .timeline {
-        padding-right: 1.5rem;
+        padding-right: 1.25rem;
+    }
+
+    .timeline-item {
+        padding-right: 1.25rem;
+    }
+
+    .timeline-item::before {
+        right: -1.95rem;
+    }
+
+    .example-box,
+    .code-example {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        max-width: 100%;
     }
 
     .quiz-section {
-        padding: 1.5rem;
+        padding: 1.25rem;
     }
 
     .quiz-question {
         padding: 1rem;
     }
 
+    .quiz-question h4 {
+        flex-wrap: wrap;
+    }
+
     .quiz-option {
         padding: 0.75rem;
     }
 
+    .quiz-option span {
+        min-width: 0;
+        overflow-wrap: break-word;
+    }
+
     .score-display {
         gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
     .score-number {
         font-size: 2rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+        min-width: 0;
+    }
+
+    .guideline-item {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .summary-box {
+        padding: 1.25rem;
+    }
+
+    .tool-card,
+    .info-card {
+        min-width: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .article {
+        padding-top: 68px;
+    }
+
+    .article .container {
+        padding: 0 0.75rem;
+    }
+
+    .breadcrumb {
+        font-size: 0.85rem;
+    }
+
+    .timeline::before {
+        right: -0.1rem;
+    }
+
+    .timeline-item::before {
+        right: -1.5rem;
+        width: 10px;
+        height: 10px;
     }
 }
