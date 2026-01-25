@@ -109,7 +109,10 @@ a:hover {
 }
 
 .logo-icon {
-    font-size: 2rem;
+    display: block;
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
 }
 
 .nav-links {
@@ -217,7 +220,7 @@ a:hover {
     align-items: center;
     justify-content: center;
     text-align: center;
-    background-image: linear-gradient(135deg, rgba(37, 99, 235, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%), url('images/colorful%20digital%20media%20sy.png');
+    background-image: linear-gradient(135deg, rgba(37, 99, 235, 0.8) 0%, rgba(124, 58, 237, 0.8) 100%), url('images/colorful%20digital%20media%20sy.png');
     background-size: cover;
     background-position: center 35%;
     background-repeat: no-repeat;

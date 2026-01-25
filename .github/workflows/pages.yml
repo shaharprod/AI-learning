@@ -29,6 +29,7 @@ jobs:
           mkdir -p _site
           cp index.html search.html style.css script.js _site/ 2>/dev/null || true
           cp -r pages _site/
+          cp -r images _site/ 2>/dev/null || true
           touch _site/.nojekyll
 
       - name: Setup Pages
