@@ -20,6 +20,7 @@
         .search-results .result-item .snippet strong { background: rgba(37,99,235,0.15); padding: 0 2px; }
         .search-results .no-results { text-align: center; color: var(--text-light); padding: 2rem; }
         .search-results .loading { text-align: center; padding: 2rem; color: var(--text-light); }
+        .anchor-hint { font-size: 0.75rem; font-weight: normal; color: var(--text-light); }
     </style>
 </head>
 <body>
@@ -46,6 +47,7 @@
                         <li><a href="pages/ai-future.html">7. העתיד של AI</a></li>
                     </ul>
                 </li>
+                <li><a href="pages/glossary.html">מילון מושגים</a></li>
                 <li><a href="index.html#tools">כלים</a></li>
                 <li><a href="index.html#about">אודות</a></li>
             </ul>
@@ -85,8 +87,28 @@
         { url: 'pages/ai-tools.html', title: 'כלים מעשיים' },
         { url: 'pages/prompt-engineering.html', title: 'הנדסת הנחייה' },
         { url: 'pages/ai-ethics.html', title: 'אתיקה ב-AI' },
-        { url: 'pages/ai-future.html', title: 'העתיד של AI' }
+        { url: 'pages/ai-future.html', title: 'העתיד של AI' },
+        { url: 'pages/glossary.html', title: 'מילון מושגים' }
     ];
+
+    /* מונחים מקבילים – חיפוש באחד יחפש גם בשאר (עברית, לועזית, קיצורים) */
+    var TERM_GROUPS = [
+        ['למידת מכונה', 'לימוד מכונה', 'מכונה לומדת', 'machine learning', 'ML'],
+        ['בינה מלאכותית', 'בינה מתוחכמת', 'artificial intelligence', 'AI'],
+        ['הנדסת הנחייה', 'נדסת הנחייה', 'הנחיות', 'פרומפט', 'prompt engineering', 'prompts'],
+        ['רשת נוירונים', 'נוירונים', 'neural network', 'neural'],
+        ['למידה עמוקה', 'למידה עמוקה', 'deep learning', 'deep learning'],
+        ['עיבוד שפה טבעית', 'שפה טבעית', 'NLP', 'natural language'],
+        ['ראייה ממוחשבת', 'ממוחשבת', 'computer vision', 'vision'],
+        ['אתיקה', 'ethics', 'מוסר'],
+        ['פרומפט', 'הנחייה', 'prompt', 'הוראה'],
+        ['מודל', 'model', 'מודלים'],
+        ['אימון', 'training', 'אימון המודל'],
+        ['צ\'אט ג\'יפיטי', 'צ\'אט גיפיטי', 'ChatGPT', 'chatgpt'],
+        ['ג\'מיני', 'גמיני', 'Gemini', 'gemini'],
+        ['קלאוד', 'Claude', 'claude']
+    ];
+
     var resultsEl = document.getElementById('search-results');
     var form = document.getElementById('search-form');
     var input = document.getElementById('search-query');
@@ -95,17 +117,57 @@
         var params = new URLSearchParams(window.location.search);
         return (params.get('q') || '').trim();
     }
+    function setQuery(q) { if (input) input.value = q; }
 
-    function setQuery(q) {
-        if (input) input.value = q;
+    function expandSearchTerms(q) {
+        var out = [q];
+        var qLower = q.toLowerCase();
+        TERM_GROUPS.forEach(function (group) {
+            var inGroup = group.some(function (t) {
+                var tl = t.toLowerCase();
+                return qLower.indexOf(tl) !== -1 || tl.indexOf(qLower) !== -1;
+            });
+            if (inGroup) group.forEach(function (t) { if (out.indexOf(t) === -1) out.push(t); });
+        });
+        return out;
+    }
+
+    function slug(t) {
+        return (t || '').trim().replace(/\s+/g, '-').replace(/[?!.,:؛'"׳]/g, '').slice(0, 80);
+    }
+
+        function getBlocks(doc) {
+        var blocks = [];
+        var body = doc.body;
+        if (!body) return blocks;
+        var headings = body.querySelectorAll('h2, h3');
+        var used = {};
+        headings.forEach(function (h) {
+            var id = (h.id || slug(h.textContent)).replace(/^\s*|\s*$/g, '');
+            if (!id) return;
+            if (used[id]) { id = id + '-' + (Math.random().toString(36).slice(2, 6)); }
+            used[id] = true;
+            var text = (h.textContent || '') + ' ';
+            var n = h.nextElementSibling;
+            while (n) {
+                if (n.tagName === 'H2' || n.tagName === 'H3') break;
+                text += (n.innerText || n.textContent || '') + ' ';
+                n = n.nextElementSibling;
+            }
+            blocks.push({ id: id, text: text.replace(/\s+/g, ' ').trim() });
+        });
+        if (blocks.length === 0) {
+            var full = (body.innerText || body.textContent || '').replace(/\s+/g, ' ');
+            blocks.push({ id: '', text: full });
+        }
+        return blocks;
     }
 
     function highlight(snippet, term) {
         if (!term) return snippet;
-        var r = new RegExp('(' + term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+        var r = new RegExp('(' + (term + '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
         return snippet.replace(r, '<strong>$1</strong>');
     }
-
     function snippetAround(text, index, termLen, chars) {
         var start = Math.max(0, index - chars);
         var end = Math.min(text.length, index + termLen + chars);
@@ -122,28 +184,35 @@
         }
         resultsEl.innerHTML = '<p class="loading">מחפש...</p>';
         setQuery(q);
-
+        var searchTerms = expandSearchTerms(q);
         var found = [];
-        var lower = q.toLowerCase();
-        var maxTotal = 25;
-        var maxPerPage = 4;
+        var maxTotal = 30;
+        var maxPerPage = 5;
+
         var promises = PAGES.map(function (p) {
             return fetch(p.url).then(function (r) { return r.text(); }).then(function (html) {
                 var parser = new DOMParser();
                 var doc = parser.parseFromString(html, 'text/html');
                 [].forEach.call(doc.querySelectorAll('script, style, noscript'), function (el) { el.remove(); });
-                var text = (doc.body && doc.body.innerText) ? doc.body.innerText : '';
-                var pos = 0, count = 0;
-                while (found.length < maxTotal && count < maxPerPage) {
-                    var i = text.toLowerCase().indexOf(lower, pos);
-                    if (i === -1) break;
-                    found.push({
-                        title: p.title,
-                        url: p.url,
-                        snippet: snippetAround(text, i, q.length, 80)
-                    });
-                    count++;
-                    pos = i + 1;
+                var blocks = getBlocks(doc);
+                var count = 0;
+                for (var b = 0; b < blocks.length && count < maxPerPage && found.length < maxTotal; b++) {
+                    var block = blocks[b];
+                    var blockLower = block.text.toLowerCase();
+                    for (var t = 0; t < searchTerms.length; t++) {
+                        var term = searchTerms[t];
+                        var idx = blockLower.indexOf(term.toLowerCase());
+                        if (idx === -1) continue;
+                        var anchor = block.id ? ('#' + block.id) : '';
+                        found.push({
+                            title: p.title,
+                            url: p.url + anchor,
+                            snippet: snippetAround(block.text, idx, term.length, 80),
+                            matchedTerm: term
+                        });
+                        count++;
+                        break;
+                    }
                 }
             }).catch(function () {});
         });
@@ -155,7 +224,7 @@
             }
             var html = '';
             found.forEach(function (r) {
-                html += '<div class="result-item"><h3><a href="' + r.url + '">' + r.title + '</a></h3><p class="snippet">' + highlight(r.snippet, q) + '</p></div>';
+                html += '<div class="result-item"><h3><a href="' + r.url + '">' + r.title + (r.url.indexOf('#') !== -1 ? ' <span class="anchor-hint">↵ קפיצה למיקום</span>' : '') + '</a></h3><p class="snippet">' + highlight(r.snippet, r.matchedTerm) + '</p></div>';
             });
             resultsEl.innerHTML = html;
         });
