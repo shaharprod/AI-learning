@@ -2,5 +2,5 @@
 
 cd "c:\Users\User\Downloads\אתר בינה מלאכותית ללימוד"
 git add -A
-git commit -m "fix: חיפוש בדסקטופ - תוכן ראשי, h1, בלוק מלא, basePath"
+git commit -m "יש"
 git push
