@@ -213,6 +213,23 @@ a:hover {
     background: var(--primary-dark);
 }
 
+.lang-switcher {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+.lang-switcher a {
+    color: var(--text-light);
+}
+.lang-switcher a:hover {
+    color: var(--primary);
+}
+.lang-switcher .lang-active {
+    font-weight: 600;
+    color: var(--primary);
+}
+
 @media (max-width: 768px) {
     .nav-search {
         order: 3;

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="images/%D7%A6%D7%99%D7%9C%D7%95%D7%9D%20%D7%9E%D7%A1%D7%9A%202026-02-09%20160037.png">
-    <title>חיפוש באתר | אתר ללימוד בינה מלאכותית AI</title>
+    <title>Search | AI Learning Website</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
@@ -22,45 +22,47 @@
         .search-results .no-results { text-align: center; color: var(--text-light); padding: 2rem; }
         .search-results .loading { text-align: center; padding: 2rem; color: var(--text-light); }
         .anchor-hint { font-size: 0.75rem; font-weight: normal; color: var(--text-light); }
+        body { direction: ltr; }
+        .search-results .result-item { border-right: none; border-left: 4px solid var(--primary); }
     </style>
 </head>
 <body>
     <header class="header">
         <nav class="nav">
             <div class="logo">
-                <a href="index.html">
-                    <img src="images/colorful%20digital%20media%20sy.png" alt="לוגו" class="logo-icon">
-                    <span class="logo-text">לימוד בינה מלאכותית AI</span>
+                <a href="index-en.html">
+                    <img src="images/colorful%20digital%20media%20sy.png" alt="Logo" class="logo-icon">
+                    <span class="logo-text">AI Learning</span>
                 </a>
             </div>
             <ul class="nav-links">
-                <li><a href="index.html">בית</a></li>
-                <li><a href="index.html#intro">מה זה AI?</a></li>
+                <li><a href="index-en.html">Home</a></li>
+                <li><a href="index-en.html#intro">What is AI?</a></li>
                 <li class="dropdown">
-                    <a href="index.html#topics" class="dropdown-toggle">שיעורים ▾</a>
+                    <a href="index-en.html#topics" class="dropdown-toggle">Lessons ▾</a>
                     <ul class="dropdown-menu">
-                        <li><a href="pages/intro-to-ai.html">1. מבוא ל-AI</a></li>
-                        <li><a href="pages/ai-history.html">2. ההיסטוריה של AI</a></li>
-                        <li><a href="pages/machine-learning.html">3. למידת מכונה</a></li>
-                        <li><a href="pages/ai-daily-life.html">4. AI בחיי היומיום</a></li>
-                        <li><a href="pages/ai-tools.html">5. כלים מעשיים</a></li>
-                        <li><a href="pages/prompt-engineering.html">6. הנדסת הנחייה</a></li>
-                        <li><a href="pages/ai-ethics.html">7. אתיקה ב-AI</a></li>
-                        <li><a href="pages/ai-future.html">8. העתיד של AI</a></li>
-                        <li><a href="pages/glossary.html">9. מילון מושגים</a></li>
+                        <li><a href="pages/intro-to-ai-en.html">1. Intro to AI</a></li>
+                        <li><a href="pages/ai-history-en.html">2. History of AI</a></li>
+                        <li><a href="pages/machine-learning-en.html">3. Machine Learning</a></li>
+                        <li><a href="pages/ai-daily-life-en.html">4. AI in Daily Life</a></li>
+                        <li><a href="pages/ai-tools-en.html">5. Practical Tools</a></li>
+                        <li><a href="pages/prompt-engineering-en.html">6. Prompt Engineering</a></li>
+                        <li><a href="pages/ai-ethics-en.html">7. AI Ethics</a></li>
+                        <li><a href="pages/ai-future-en.html">8. The Future of AI</a></li>
+                        <li><a href="pages/glossary-en.html">9. Glossary</a></li>
                     </ul>
                 </li>
-                <li><a href="pages/glossary.html">מילון</a></li>
-                <li><a href="index.html#tools">כלים</a></li>
-                <li><a href="index.html#about">אודות</a></li>
+                <li><a href="pages/glossary-en.html">Glossary</a></li>
+                <li><a href="index-en.html#tools">Tools</a></li>
+                <li><a href="index-en.html#about">About</a></li>
             </ul>
             <form class="nav-search" id="site-search" role="search">
-                <input type="search" name="q" placeholder="חיפוש מילים ומושגים..." aria-label="חיפוש באתר" />
-                <button type="submit" aria-label="חפש">🔍</button>
+                <input type="search" name="q" placeholder="Search words and terms..." aria-label="Search site" />
+                <button type="submit" aria-label="Search">🔍</button>
             </form>
-            <nav class="lang-switcher" aria-label="בחירת שפה">
-                <a href="search-en.html" hreflang="en" lang="en">English</a>
-                <span class="lang-active" aria-current="page">עברית</span>
+            <nav class="lang-switcher" aria-label="Language">
+                <a href="search.html" hreflang="he" lang="he">עברית</a>
+                <span class="lang-active" aria-current="page">English</span>
             </nav>
             <button type="button" class="mobile-menu-btn" aria-label="תפריט">
                 <span></span><span></span><span></span>
@@ -70,10 +72,10 @@
 
     <main class="section search-page">
         <div class="container">
-            <h1>חיפוש מילים ומושגים באתר</h1>
+            <h1>Search words and terms</h1>
             <div class="search-form-wrap">
                 <form id="search-form" role="search">
-                    <input type="search" name="q" id="search-query" placeholder="הקלידו מילה או מושג..." aria-label="חיפוש" autofocus />
+                    <input type="search" name="q" id="search-query" placeholder="Enter a word or term..." aria-label="Search" autofocus />
                 </form>
             </div>
             <div id="search-results" class="search-results"></div>
@@ -82,24 +84,24 @@
 
     <footer class="footer">
         <div class="container">
-            <p>© 2025 אתר ללימוד בינה מלאכותית AI - כל הזכויות שמורות לשמוליק שחר יועץ לימודי המנגיש לימודי בינה מלאכותית לכל אדם</p>
-            <p class="footer-contact">טלפון: <a href="tel:+972522603831">+972522603831</a> | אימייל: <a href="mailto:shaharprod@gmail.com">shaharprod@gmail.com</a></p>
+            <p>© 2025 AI Learning – All rights reserved. Shmuelik Shahar – Educational consultant.</p>
+            <p class="footer-contact">Phone: <a href="tel:+972522603831">+972522603831</a> | Email: <a href="mailto:shaharprod@gmail.com">shaharprod@gmail.com</a></p>
         </div>
     </footer>
 
     <script>
 (function () {
     var PAGES = [
-        { url: 'index.html', title: 'דף הבית' },
-        { url: 'pages/intro-to-ai.html', title: 'מבוא ל-AI' },
-        { url: 'pages/ai-history.html', title: 'ההיסטוריה של AI' },
-        { url: 'pages/machine-learning.html', title: 'למידת מכונה' },
-        { url: 'pages/ai-daily-life.html', title: 'AI בחיי היומיום' },
-        { url: 'pages/ai-tools.html', title: 'כלים מעשיים' },
-        { url: 'pages/prompt-engineering.html', title: 'הנדסת הנחייה' },
-        { url: 'pages/ai-ethics.html', title: 'אתיקה ב-AI' },
-        { url: 'pages/ai-future.html', title: 'העתיד של AI' },
-        { url: 'pages/glossary.html', title: 'מילון מושגים' }
+        { url: 'index-en.html', title: 'Home' },
+        { url: 'pages/intro-to-ai-en.html', title: 'Intro to AI' },
+        { url: 'pages/ai-history-en.html', title: 'History of AI' },
+        { url: 'pages/machine-learning-en.html', title: 'Machine Learning' },
+        { url: 'pages/ai-daily-life-en.html', title: 'AI in Daily Life' },
+        { url: 'pages/ai-tools-en.html', title: 'Practical Tools' },
+        { url: 'pages/prompt-engineering-en.html', title: 'Prompt Engineering' },
+        { url: 'pages/ai-ethics-en.html', title: 'AI Ethics' },
+        { url: 'pages/ai-future-en.html', title: 'The Future of AI' },
+        { url: 'pages/glossary-en.html', title: 'Glossary' }
     ];
 
     /* מונחים מקבילים – חיפוש באחד יחפש גם בשאר (עברית, לועזית, קיצורים) */
@@ -198,10 +200,10 @@
 
     function runSearch(q) {
         if (!q) {
-            resultsEl.innerHTML = '<p class="no-results">הזינו מילה או מושג לחיפוש.</p>';
+            resultsEl.innerHTML = '<p class="no-results">Enter a word or term to search.</p>';
             return;
         }
-            resultsEl.innerHTML = '<p class="loading">מחפש...</p>';
+            resultsEl.innerHTML = '<p class="loading">Searching...</p>';
         setQuery(q);
         var searchTerms = expandSearchTerms(q);
         var found = [];
@@ -244,7 +246,7 @@
             }
             var html = '';
             found.forEach(function (r) {
-                html += '<div class="result-item"><h3><a href="' + r.url + '">' + r.title + (r.url.indexOf('#') !== -1 ? ' <span class="anchor-hint">↵ קפיצה למיקום</span>' : '') + '</a></h3><p class="snippet">' + highlight(r.snippet, r.matchedTerm) + '</p></div>';
+                html += '<div class="result-item"><h3><a href="' + r.url + '">' + r.title + (r.url.indexOf('#') !== -1 ? ' <span class="anchor-hint">↵ Jump to section</span>' : '') + '</a></h3><p class="snippet">' + highlight(r.snippet, r.matchedTerm) + '</p></div>';
             });
             resultsEl.innerHTML = html;
         });
@@ -254,7 +256,7 @@
         form.addEventListener('submit', function (e) {
             e.preventDefault();
             var q = (input && input.value) ? input.value.trim() : '';
-            if (q) window.location.href = 'search.html?q=' + encodeURIComponent(q);
+            if (q) window.location.href = 'search-en.html?q=' + encodeURIComponent(q);
             return false;
         });
     }

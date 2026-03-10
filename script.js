@@ -3,7 +3,8 @@
     var form = document.getElementById('site-search');
     if (!form) return;
     var base = (window.location.href.indexOf('/pages/') !== -1) ? '../' : '';
-    form.action = base + 'search.html';
+    var isEn = (window.location.pathname || '').indexOf('-en.') !== -1;
+    form.action = base + (isEn ? 'search-en.html' : 'search.html');
     form.addEventListener('submit', function (e) {
         e.preventDefault();
         var q = (form.querySelector('[name=q]') || {}).value;
