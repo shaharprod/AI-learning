@@ -27,9 +27,11 @@ jobs:
       - name: Prepare site folder
         run: |
           mkdir -p _site
-          cp index.html search.html style.css script.js _site/ 2>/dev/null || true
+          cp index.html index-en.html search.html search-en.html style.css script.js _site/ 2>/dev/null || true
           cp -r pages _site/
           cp -r images _site/ 2>/dev/null || true
+          mkdir -p _site/en
+          cp en/index.html _site/en/ 2>/dev/null || true
           touch _site/.nojekyll
 
       - name: Setup Pages
