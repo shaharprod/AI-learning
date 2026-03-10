@@ -51,11 +51,13 @@ if (document.readyState === 'loading') {
     initMobileMenu();
 }
 
-// Smooth scroll for anchor links
+// Smooth scroll for anchor links (click)
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
+        const hash = this.getAttribute('href');
+        if (hash === '#') return;
+        const target = document.querySelector(hash);
         if (target) {
             const headerHeight = document.querySelector('.header').offsetHeight;
             const targetPosition = target.offsetTop - headerHeight;
@@ -66,6 +68,24 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+
+// Scroll to hash on page load (e.g. index-en.html#tools, #about)
+function scrollToHash() {
+    var hash = window.location.hash;
+    if (!hash) return;
+    var target = document.querySelector(hash);
+    if (target) {
+        var header = document.querySelector('.header');
+        var headerHeight = header ? header.offsetHeight : 0;
+        var targetPosition = target.offsetTop - headerHeight;
+        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+    }
+}
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', scrollToHash);
+} else {
+    scrollToHash();
+}
 
 // Header shadow on scroll
 const header = document.querySelector('.header');
