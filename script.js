@@ -169,17 +169,18 @@ function initQuiz() {
         // Set message based on score
         let message = '';
         let emoji = '';
+        const isEn = document.documentElement.lang === 'en' || document.documentElement.getAttribute('dir') === 'ltr';
         if (percent >= 90) {
-            message = 'מצוין! שליטה מרשימה בחומר!';
+            message = isEn ? 'Excellent! Impressive mastery!' : 'מצוין! שליטה מרשימה בחומר!';
             emoji = '🏆';
         } else if (percent >= 70) {
-            message = 'כל הכבוד! הבנה טובה של הנושא';
+            message = isEn ? 'Well done! Good understanding of the topic' : 'כל הכבוד! הבנה טובה של הנושא';
             emoji = '👏';
         } else if (percent >= 50) {
-            message = 'לא רע! כדאי לחזור על החומר';
+            message = isEn ? 'Not bad! Worth reviewing the material' : 'לא רע! כדאי לחזור על החומר';
             emoji = '📚';
         } else {
-            message = 'מומלץ לקרוא שוב את המאמר';
+            message = isEn ? 'Recommended to read the lesson again' : 'מומלץ לקרוא שוב את המאמר';
             emoji = '💪';
         }
         messageSpan.textContent = emoji + ' ' + message;
