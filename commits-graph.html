@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>גרף קומיטים — AI-learning</title>
+  <style>
+    :root { --line: #4a9eff; --node: #2563eb; --bg: #0f172a; --card: #1e293b; --text: #e2e8f0; --muted: #94a3b8; }
+    * { box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 1.5rem; line-height: 1.5; }
+    h1 { font-size: 1.5rem; margin: 0 0 0.5rem; }
+    .repo-link { color: var(--line); text-decoration: none; font-size: 0.95rem; }
+    .repo-link:hover { text-decoration: underline; }
+    .meta { color: var(--muted); font-size: 0.85rem; margin-bottom: 1.5rem; }
+    .graph { position: relative; padding-right: 1rem; }
+    .commit { position: relative; display: flex; gap: 1rem; margin-bottom: 0.35rem; padding: 0.4rem 0; }
+    .commit::before { content: ''; position: absolute; right: 0.45rem; top: 1.1rem; bottom: -0.35rem; width: 2px; background: var(--line); opacity: 0.6; }
+    .commit:last-child::before { display: none; }
+    .node { flex-shrink: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--node); margin-top: 0.25rem; border: 2px solid var(--bg); box-shadow: 0 0 0 1px var(--line); }
+    .body { flex: 1; min-width: 0; }
+    .hash { font-family: ui-monospace, monospace; font-size: 0.8rem; color: var(--muted); margin-left: 0.5rem; }
+    .hash a { color: var(--line); text-decoration: none; }
+    .hash a:hover { text-decoration: underline; }
+    .msg { font-weight: 500; word-break: break-word; }
+    .author, .date { font-size: 0.8rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <h1>גרף קומיטים — AI-learning</h1>
+  <a class="repo-link" href="https://github.com/shaharprod/AI-learning" target="_blank" rel="noopener">github.com/shaharprod/AI-learning</a>
+  <p class="meta">ענף main — 41 קומיטים (מחדש לישן)</p>
+  <div class="graph" id="graph"></div>
+  <script>
+    const REPO = 'https://github.com/shaharprod/AI-learning/commit/';
+    const commits = [
+      ["ee0d119","Update copyright year to 2026","shaharprod","2026-03-10"],
+      ["5523611","Hebrew only: revert סאם שחר to שמוליק שחר","shaharprod","2026-03-10"],
+      ["ec0a30c","Replace Shmuelik Shahar with Sam Shahar (EN) and שמוליק שחר with סאם שחר (HE)","shaharprod","2026-03-10"],
+      ["59efbbe","Fix English on GitHub: duplicate id=tools, robust deploy, scroll to #hash on load","shaharprod","2026-03-10"],
+      ["001f474","Fix GitHub Pages: deploy index-en.html, search-en.html and en/ folder","shaharprod","2026-03-10"],
+      ["c7b36c3","Fix: make logo clickable on home pages (link to home)","shaharprod","2026-03-10"],
+      ["96937c1","Full English translation: ai-future and glossary pages","shaharprod","2026-03-10"],
+      ["2970709","Add en/index.html redirect for /en/ URL","shaharprod","2026-03-10"],
+      ["b0c5208","Translate 4 more lessons to English: ai-daily-life, ai-tools, prompt-engineering, ai-ethics","shaharprod","2026-03-10"],
+      ["5651227","Translate lesson content to English: intro-to-ai, ai-history, machine-learning; quiz messages i18n in script.js","shaharprod","2026-03-10"],
+      ["7c79ac4","אנגלית: מתג שפה עברית/English, index-en, search-en, דפי שיעורים -en","shaharprod","2026-03-10"],
+      ["bb773a1","שיעור הנדסת הנחייה: שילוב מודל CRAFT לאורך הדף, תבנית, סיכום וקוויז","shaharprod","2026-03-10"],
+      ["9bd88dd","היסטוריה של AI → ההיסטוריה של AI, מה לא אני רוצה → מה אני לא רוצה","shaharprod","2026-03-10"],
+      ["7c8b569","fix: URL של האתר החי ב-README","shaharprod","2026-02-09"],
+      ["e9434c0","FAVICON","shaharprod","2026-02-09"],
+      ["a7448b1","FAVICON","shaharprod","2026-02-09"],
+      ["b405d2b","יש","shaharprod","2026-01-29"],
+      ["7cf903d","fix: חיפוש בדסקטופ - תוכן ראשי, h1, בלוק מלא, basePath","shaharprod","2026-01-25"],
+      ["29b7d1a","משופר","shaharprod","2026-01-25"],
+      ["24d4590","רגיל","shaharprod","2026-01-25"],
+      ["9a5b09f","fix: תפריט המבורגר במובייל - position fixed ו-z-index כדי שייראה ולא ייחסם","shaharprod","2026-01-25"],
+      ["1c37e2d","fix: תפריט המבורגר בנייד + כפתור בכל הדפים","shaharprod","2026-01-25"],
+      ["4a7dcbc","תיקון תפריט המבורגר בנייד – DOMContentLoaded וטיפול ב-click","shaharprod","2026-01-25"],
+      ["accad3d","כותרת תפריט: לימוד בינה מלאכותית AI; הקטנת תפריט עליון בנייד ב-50%","shaharprod","2026-01-25"],
+      ["0d53668","תפריט מובייל קומפקטי – צמצום גודל וריווח, מניעת גלישה","shaharprod","2026-01-25"],
+      ["30a091d","תמונת רקע ב-Hero עם 65% שקיפות, ללא תמונה בתפריט","shaharprod","2026-01-25"],
+      ["ab7bc59","תמונת רקע ב-Hero עם 65% שקיפות, ללא תמונה בתפריט","shaharprod","2026-01-25"],
+      ["82a1195","תמונת רקע ב-Hero עם 65% שקיפות, ללא תמונה בתפריט","shaharprod","2026-01-25"],
+      ["0ec828b","תמונת רקע לכותרת - colorful digital media sy.png עם חצי שקיפות","shaharprod","2026-01-25"],
+      ["69b91cc","תמונת רקע לכותרת בחצי שקיפות","shaharprod","2026-01-25"],
+      ["446a1a7","תמונת רקע לכותרת בחצי שקיפות","shaharprod","2026-01-25"],
+      ["0edde71","תיקון ניווט משיעור לשיעור לפי מספור 1-9, הוספת קודם/הבא בהיסטוריה ומילון","shaharprod","2026-01-25"],
+      ["7cc621b","עדכון: סדר שיעורים, היסטוריה ומילון לפי סדר כרונולוגי","shaharprod","2026-01-25"],
+      ["4818b8e","עדכון אתר - 2026-01-25 07:57","shaharprod","2026-01-25"],
+      ["014c0b0","עדכון אתר - 2026-01-25 07:54","shaharprod","2026-01-25"],
+      ["cbec2cc","מילון מושגים: דף עם 100+ מושגים עברית+אנגלית, עדכון ניווט וחיפוש","shaharprod","2026-01-25"],
+      ["c0b859b","Notebook LM ג'מס Perplexity חיפוש README טלפון ומייל","shaharprod","2026-01-25"],
+      ["06185f6","README עדכון טלפון ומייל בפוטר","shaharprod","2026-01-25"],
+      ["66f4671","מחיקת חומר לא הכרחי","shaharprod","2026-01-25"],
+      ["dac4523","הוספת טלפון ומייל בתחתית כל העמודים","shaharprod","2026-01-25"],
+      ["9576cf5","אתר בינה מלאכותית ללימוד - עדכון","Claude Code Demo User","2026-01-25"]
+    ];
+    const el = document.getElementById('graph');
+    commits.forEach(function (c) {
+      const [hash, msg, author, date] = c;
+      const div = document.createElement('div');
+      div.className = 'commit';
+      div.innerHTML =
+        '<div class="node" aria-hidden="true"></div>' +
+        '<div class="body">' +
+          '<span class="msg">' + escapeHtml(msg) + '</span> ' +
+          '<span class="hash"><a href="' + REPO + hash + '" target="_blank" rel="noopener">' + hash + '</a></span>' +
+          '<div class="author">' + escapeHtml(author) + ' · ' + date + '</div>' +
+        '</div>';
+      el.appendChild(div);
+    });
+    function escapeHtml(s) {
+      const n = document.createElement('span');
+      n.textContent = s;
+      return n.innerHTML;
+    }
+  </script>
+</body>
+</html>
