@@ -153,6 +153,15 @@ a:hover {
     line-height: 1.2;
 }
 
+/* כותרת הלוגו (למשל "לימוד בינה מלאכותית AI") — שחור, לא כחול primary */
+.logo .logo-text {
+    color: #000000;
+}
+
+.logo a:hover .logo-text {
+    color: #000000;
+}
+
 .logo-stack {
     display: flex;
     flex-direction: column;
