@@ -162,6 +162,22 @@ a:hover {
     color: #000000;
 }
 
+/* English (LTR): same two-line logo — black title, blue byline (COMBE) */
+html[lang="en"] .logo .logo-byline {
+    color: #2b63e1;
+    font-weight: 700;
+    font-size: 0.72em;
+}
+
+html[lang="en"] .logo a:hover .logo-byline {
+    color: #2b63e1;
+}
+
+html[lang="en"] .logo-stack {
+    text-align: left;
+    align-items: flex-start;
+}
+
 .logo-stack {
     display: flex;
     flex-direction: column;
@@ -525,6 +541,14 @@ a:hover {
         line-height: 1.15;
     }
 
+    html[lang="en"] .logo .logo-text {
+        font-size: 0.8rem;
+    }
+
+    html[lang="en"] .logo .logo-byline {
+        font-size: 0.62rem;
+    }
+
     .logo-icon {
         width: 20px;
         height: 20px;
@@ -690,6 +714,14 @@ a:hover {
     .logo-tagline,
     .logo-byline {
         font-size: 0.95rem;
+    }
+
+    html[lang="en"] .logo .logo-text {
+        font-size: 0.95rem;
+    }
+
+    html[lang="en"] .logo .logo-byline {
+        font-size: 0.72rem;
     }
 
     .hero {
