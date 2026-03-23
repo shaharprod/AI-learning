@@ -142,26 +142,24 @@ a:hover {
     flex-shrink: 0;
 }
 
-.logo-text {
+.logo-text,
+.logo-tagline,
+.logo-byline {
     overflow-wrap: break-word;
     word-break: break-word;
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+    line-height: 1.2;
 }
 
 .logo-stack {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.1rem;
-    min-width: 0;
-}
-
-.logo-byline {
-    font-size: 0.55rem;
-    font-weight: 400;
+    gap: 0.15rem;
     line-height: 1.2;
-    color: var(--text);
-    opacity: 0.8;
-    max-width: 14rem;
+    min-width: 0;
 }
 
 .nav-links {
@@ -511,14 +509,11 @@ a:hover {
         flex: 1 1 auto;
     }
 
-    .logo-text {
+    .logo-text,
+    .logo-tagline,
+    .logo-byline {
         font-size: 0.8rem;
         line-height: 1.15;
-    }
-
-    .logo-byline {
-        font-size: 0.5rem;
-        max-width: min(12rem, 55vw);
     }
 
     .logo-icon {
@@ -682,7 +677,9 @@ a:hover {
         padding: 2rem 0;
     }
 
-    .logo-text {
+    .logo-text,
+    .logo-tagline,
+    .logo-byline {
         font-size: 0.95rem;
     }
 
